@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 基础工具方法模块
+ * @Author: xutao
+ * @Date: 2019-09-15 18:00:05
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-18 20:05:38
+ */
 var core;
 (function (core) {
     var util;
@@ -8,6 +15,13 @@ var core;
         util.isFunction = isFunction;
     })(util = core.util || (core.util = {}));
 })(core || (core = {}));
+/*
+ * @Descripttion: 日志工具方法模块
+ * @Author: xutao
+ * @Date: 2019-09-12 17:55:58
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-18 20:05:59
+ */
 var core;
 (function (core) {
     var logUtil;
@@ -43,7 +57,7 @@ var core;
  * @Author: xutao
  * @Date: 2019-07-23 10:38:09
  * @LastEditors: xutao
- * @LastEditTime: 2019-09-12 17:17:32
+ * @LastEditTime: 2019-09-18 20:15:58
  */
 /// <reference path="../utils/util.ts" />
 /// <reference path="../utils/logUtil.ts" />
@@ -135,6 +149,13 @@ var core;
     }());
     core.EventEmitter = EventEmitter;
 })(core || (core = {}));
+/*
+ * @Descripttion:
+ * @Author: xutao
+ * @Date: 2019-09-12 17:19:56
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-18 20:06:42
+ */
 /// <reference path="./event/EventEmitter.ts" />
 var core;
 (function (core) {
@@ -142,5 +163,146 @@ var core;
     }
     core.init = init;
 })(core || (core = {}));
-/// <reference path="./core/index.ts" />
-core.init();
+/*
+ * @Descripttion: 自定义事件枚举
+ * @Author: xutao
+ * @Date: 2019-09-18 19:30:48
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-18 20:04:46
+ */
+var core;
+(function (core) {
+    var CustomEventID;
+    (function (CustomEventID) {
+    })(CustomEventID = core.CustomEventID || (core.CustomEventID = {}));
+})(core || (core = {}));
+/*
+ * @Descripttion: 事件数据
+ * @Author: xutao
+ * @Date: 2019-09-18 20:08:28
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-19 17:06:59
+ */
+var core;
+(function (core) {
+    var EventData = /** @class */ (function () {
+        function EventData() {
+        }
+        return EventData;
+    }());
+    core.EventData = EventData;
+})(core || (core = {}));
+/*
+ * @Descripttion:
+ * @Author: xutao
+ * @Date: 2019-09-18 19:02:47
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-19 17:03:59
+ */
+var core;
+(function (core) {
+    var UIType = /** @class */ (function () {
+        function UIType() {
+        }
+        UIType.FIRST_UI = 'FIRST_UI';
+        return UIType;
+    }());
+    core.UIType = UIType;
+})(core || (core = {}));
+/*
+ * @Descripttion: UI基类
+ * @Author: xutao
+ * @Date: 2019-09-18 18:50:58
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-19 16:57:14
+ */
+/// <reference path="../define/CustomEventID.ts" />
+/// <reference path="../event/EventEmitter.ts" />
+/// <reference path="../define/EventData.ts" />
+var core;
+(function (core) {
+    var BaseUI = /** @class */ (function () {
+        function BaseUI() {
+            this.addEventListeners();
+        }
+        BaseUI.prototype.onCreate = function () {
+        };
+        BaseUI.prototype.onShow = function () {
+        };
+        BaseUI.prototype.onHide = function () {
+        };
+        BaseUI.prototype.onClose = function () {
+        };
+        /**
+         * 添加自定义事件
+         */
+        BaseUI.prototype.addEventListeners = function () {
+            var _this = this;
+            var eventIds = this.getInterests();
+            eventIds.forEach(function (id) {
+                core.EventEmitter.on(id, _this.onEvent);
+            });
+        };
+        /**
+         * 移除全部的自定义事件
+         */
+        BaseUI.prototype.removeAllEventListeners = function () {
+            var _this = this;
+            var eventIds = this.getInterests();
+            eventIds.forEach(function (id) {
+                core.EventEmitter.off(id, _this.onEvent);
+            });
+        };
+        /**
+         * 注册事件
+         */
+        BaseUI.prototype.getInterests = function () {
+            return [];
+        };
+        /**
+         * 事件监听器
+         * @param eventData {core.EventData}
+         */
+        BaseUI.prototype.onEvent = function (eventData) {
+            switch (eventData.customID) {
+                default:
+                    break;
+            }
+        };
+        return BaseUI;
+    }());
+    core.BaseUI = BaseUI;
+})(core || (core = {}));
+/*
+ * @Descripttion: UI管理器
+ * @Author: xutao
+ * @Date: 2019-09-18 18:58:14
+ * @LastEditors: xutao
+ * @LastEditTime: 2019-09-19 17:22:08
+ */
+/// <reference path="../ui/BaseUI.ts" />
+var core;
+(function (core) {
+    var UIMgr = /** @class */ (function () {
+        function UIMgr() {
+            this._cache = {};
+        }
+        Object.defineProperty(UIMgr, "instance", {
+            get: function () {
+                return this._instance || (this._instance = new UIMgr);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        UIMgr.prototype.openUI = function (uiName, uiClass, isCache) {
+            if (isCache === void 0) { isCache = false; }
+            var baseUI = this._cache[uiName] || new uiClass();
+            return baseUI;
+        };
+        UIMgr.prototype.closeUI = function () {
+        };
+        return UIMgr;
+    }());
+    core.UIMgr = UIMgr;
+})(core || (core = {}));
+//# sourceMappingURL=index.js.map

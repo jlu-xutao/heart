@@ -3,7 +3,7 @@
  * @Author: xutao
  * @Date: 2019-07-23 10:38:09
  * @LastEditors: xutao
- * @LastEditTime: 2019-09-12 17:17:32
+ * @LastEditTime: 2019-09-18 20:15:58
  */
 /// <reference path="../utils/util.ts" />
 /// <reference path="../utils/logUtil.ts" />
@@ -22,7 +22,7 @@ namespace core {
          */
         private static maxWaitEventTime: number = 16;
 
-        static on(name: string, fn: Function) {
+        static on(name: string | number, fn: Function) {
 
             if (core.util.isFunction(fn)) {
                 core.logUtil.warn('EventEmitter on: fn should be Function');
@@ -36,7 +36,7 @@ namespace core {
             }
         }
 
-        static off(name: string, fn?: Function) {
+        static off(name: string | number, fn?: Function) {
             let cbs: Function[] = this._events[name];
             if (!cbs) {
                 return;
@@ -53,7 +53,7 @@ namespace core {
             }
         }
 
-        static emit(name: string, ...args: any[]) {
+        static emit(name: string | number, ...args: any[]) {
             let cbs: Function[] = this._events[name];
             if (!cbs) {
                 return;
@@ -70,7 +70,7 @@ namespace core {
             }
         }
 
-        static sendEvent(name: string, ...args: any[]) {
+        static sendEvent(name: string | number, ...args: any[]) {
             (this._eventsCache || (this._eventsCache = [])).push(<eventInfo>{
                 name,
                 args
